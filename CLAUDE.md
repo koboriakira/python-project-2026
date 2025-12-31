@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-2026年の最新Python開発テンプレートプロジェクト。uv、ruff、pytest、mypy、Claude Code hooksを使用したモダンなPython開発環境を提供。
+2026年の最新Python開発テンプレートプロジェクト。uv、ruff、pytest、mypy、Claude Code hooks、pre-commitを使用したモダンなPython開発環境を提供。
 
 ## 開発環境とツール
 
@@ -29,11 +29,16 @@ uv run ruff check .              # リンティング
 uv run ruff format .             # フォーマット
 uv run mypy                      # 型チェック
 
-# 開発者ツール（Claude Code hooks）
+# 開発者ツール
+# Claude Code hooks（推奨）
 .claude/scripts/pre-commit-replacement.sh  # 統合品質チェック
 .claude/scripts/code-quality.sh           # Python コード品質チェック
 .claude/scripts/run-tests.sh              # テスト実行
 .claude/scripts/file-checks.sh            # ファイル品質チェック
+
+# 従来のpre-commit（手動開発時）
+uv run pre-commit run --all-files         # 全ファイルチェック
+uv run pre-commit install                 # Git hooksインストール
 ```
 
 ### パッケージ操作
@@ -113,7 +118,7 @@ uv run ruff check . && uv run ruff format . && uv run mypy
 - Python 3.12、3.13 サポート
 - テスト・リンティング・型チェック・セキュリティ監査
 
-### Claude Code hooks（従来のpre-commitを置き換え）
+### Claude Code hooks（AI統合品質管理）
 - **ファイル変更時**: 自動的にコード品質チェックを提案
 - **コミット時**: リンティング、フォーマット、型チェック、テスト実行
 - **設定ファイル**: `.claude/settings.local.json` で hooks 設定管理
@@ -125,13 +130,23 @@ uv run ruff check . && uv run ruff format . && uv run mypy
 
 # 個別チェック
 .claude/scripts/code-quality.sh     # ruff + mypy
-.claude/scripts/run-tests.sh        # pytest実行  
+.claude/scripts/run-tests.sh        # pytest実行
 .claude/scripts/file-checks.sh      # ファイル品質
 ```
 
 #### hooks自動実行タイミング
 - **PostToolUse**: Write/Edit/MultiEdit 後にファイルチェック提案
 - **UserPromptSubmit**: 「コミット」関連プロンプトで品質チェック実行
+
+### 従来のpre-commit（手動開発時）
+- **Git hooks統合**: コミット前の自動品質チェック
+- **設定ファイル**: `.pre-commit-config.yaml`
+- **手動実行**: `uv run pre-commit run --all-files`
+
+#### 使い分けの指針
+- **Claude Code使用時**: Claude Code hooks（AI統合、リアルタイム提案）
+- **手動開発時**: 従来のpre-commit（Git hooks、コミット時実行）
+- **CI/CD**: 両方の設定をGitHub Actionsで活用
 
 ### Release Please（自動リリース管理）
 - **Conventional Commits**に基づく自動バージョニング

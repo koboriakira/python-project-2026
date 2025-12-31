@@ -45,7 +45,7 @@ if [ -n "$PYTHON_FILES" ]; then
     echo ""
     echo "2️⃣ Python コード品質チェック"
     .claude/scripts/code-quality.sh
-    
+
     echo ""
     echo "3️⃣ テスト実行"
     .claude/scripts/run-tests.sh
