@@ -124,7 +124,7 @@ markers = [
 # MyPy設定
 [tool.mypy]
 python_version = "3.12"
-packages = ["src/python_project_2026"]
+files = ["src/python_project_2026"]
 strict = true
 warn_unreachable = true
 warn_unused_ignores = true
