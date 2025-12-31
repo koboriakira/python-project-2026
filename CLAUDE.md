@@ -6,6 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 2026年の最新Python開発テンプレートプロジェクト。uv、ruff、pytest、mypy、Claude Code hooks、pre-commitを使用したモダンなPython開発環境を提供。
 
+### Claude Code統合機能
+- **サブエージェント**: 専門領域別のAI支援（GitHub、コードレビュー、テスト、開発ワークフロー）
+- **スラッシュコマンド**: 開発タスクの自動化コマンド
+- **統合ワークフロー**: 大まかな依頼から完成したPRまでの一気通貫処理
+
 ## 開発環境とツール
 
 ### パッケージ管理: uv
@@ -197,9 +202,68 @@ git commit -m "ci: CI設定改善"
 - `mypy`: 静的型チェッカー
 - `pre-commit`: Git フック管理
 
+## Claude Code機能（AI統合開発支援）
+
+### サブエージェント（専門AI支援）
+
+利用可能なサブエージェント：
+
+```bash
+/agents github-agent      # GitHub操作専門（Issue/PR作成・管理）
+/agents code-reviewer     # コード品質専門（ruff/mypy解析、改善提案）
+/agents test-engineer     # テスト品質専門（pytest最適化、カバレッジ分析）
+/agents dev-workflow      # 開発ワークフロー統括（要件分析→PR完成）
+```
+
+### スラッシュコマンド（タスク自動化）
+
+開発効率化コマンド：
+
+```bash
+# 統合開発ワークフロー
+/develop "機能名または要件"           # 要件分析→Issue→実装→PRまで一括実行
+
+# GitHub操作
+/create-issue type "タイトル"        # Issue自動作成（bug/feature/tech-debt/security）
+/create-pr "タイトル" "説明"         # PR自動作成（品質チェック統合）
+
+# 品質管理
+/test-and-fix                       # テスト実行＋自動修正＋レポート生成
+```
+
+### 使用例：一気通貫開発
+
+```bash
+# 1. 大まかな依頼から完成まで自動化
+/develop "ユーザー認証機能（JWT、セキュリティ重視）"
+
+# このコマンドが自動実行する内容:
+# - 技術要件分析（JWT vs セッション認証選択等）
+# - 構造化されたIssue作成（受入基準付き）
+# - 適切なブランチ作成（feature/user-authentication）
+# - TDD実装プロセス（テスト→実装→リファクタ）
+# - 統合品質チェック（ruff/mypy/pytest/security）
+# - 包括的なPR作成（変更内容・テスト・チェックリスト）
+```
+
+### サブエージェント連携例
+
+```bash
+# 2. 個別専門支援
+/agents code-reviewer                # コード品質向上支援
+# → ruffエラー解析、型ヒント最適化、セキュリティ改善提案
+
+/agents test-engineer               # テスト品質向上支援
+# → カバレッジ分析、パラメータ化テスト提案、モック最適化
+
+/agents github-agent                # GitHub管理支援
+# → Issue管理、PR状態確認、release-please監視
+```
+
 ## 注意事項
 
 - uvコマンドは必ず`uv run`プレフィックス使用（仮想環境自動活用）
 - pyproject.toml直接編集せず`uv add`/`uv remove`使用
 - 新しい依存関係追加時は適切なグループ（dev/test/docs）に分類
 - テストは必ず`tests/`ディレクトリに配置、`test_*.py`命名
+- Claude Code機能により開発効率が大幅向上、積極的活用推奨

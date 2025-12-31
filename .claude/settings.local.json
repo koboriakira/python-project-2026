@@ -4,7 +4,8 @@
       "Bash(mv:*)",
       "Bash(.claude/scripts/pre-commit-replacement.sh:*)",
       "Bash(PRE_COMMIT_ALLOW_NO_CONFIG=1 git commit -m \"feat: Claude Code hooksでpre-commitを置き換え\n\n- .claude/settings.local.json に hooks 設定を追加\n- pre-commit機能を4つのスクリプトで置き換え:\n  - code-quality.sh: ruff + mypy チェック\n  - run-tests.sh: pytest実行\n  - file-checks.sh: ファイル品質チェック\n  - pre-commit-replacement.sh: 統合実行\n- PostToolUse/UserPromptSubmitでの自動実行\n- 従来のpre-commitを無効化\n\n🚀 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(ls:*)"
     ],
     "deny": []
   }
