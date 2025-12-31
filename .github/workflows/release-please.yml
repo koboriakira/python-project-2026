@@ -9,10 +9,17 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
+  repository-projects: read
 
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      repository-projects: read
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
@@ -29,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.release-please.outputs.release_created }}
     environment:
-      name: pypi
+      name: production
       url: https://pypi.org/p/python-project-2026
     permissions:
       id-token: write
@@ -61,9 +68,6 @@ jobs:
     needs: release-please
     runs-on: ubuntu-latest
     if: ${{ needs.release-please.outputs.release_created }}
-    environment:
-      name: test-pypi
-      url: https://test.pypi.org/p/python-project-2026
     permissions:
       id-token: write
     steps:
