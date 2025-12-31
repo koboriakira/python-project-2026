@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-2026年の最新Python開発テンプレートプロジェクト。uv、ruff、pytest、mypy、pre-commitを使用したモダンなPython開発環境を提供。
+2026年の最新Python開発テンプレートプロジェクト。uv、ruff、pytest、mypy、Claude Code hooksを使用したモダンなPython開発環境を提供。
 
 ## 開発環境とツール
 
@@ -29,9 +29,11 @@ uv run ruff check .              # リンティング
 uv run ruff format .             # フォーマット
 uv run mypy                      # 型チェック
 
-# 開発者ツール
-uv run pre-commit run --all-files # 全ファイルでpre-commitチェック
-uv run pre-commit install        # pre-commitフック設定
+# 開発者ツール（Claude Code hooks）
+.claude/scripts/pre-commit-replacement.sh  # 統合品質チェック
+.claude/scripts/code-quality.sh           # Python コード品質チェック
+.claude/scripts/run-tests.sh              # テスト実行
+.claude/scripts/file-checks.sh            # ファイル品質チェック
 ```
 
 ### パッケージ操作
@@ -111,10 +113,25 @@ uv run ruff check . && uv run ruff format . && uv run mypy
 - Python 3.12、3.13 サポート
 - テスト・リンティング・型チェック・セキュリティ監査
 
-### Pre-commit フック
-- コミット前の自動品質チェック
-- ruff（リンティング・フォーマット）、mypy（型チェック）
-- YAML/TOML/JSON構文チェック
+### Claude Code hooks（従来のpre-commitを置き換え）
+- **ファイル変更時**: 自動的にコード品質チェックを提案
+- **コミット時**: リンティング、フォーマット、型チェック、テスト実行
+- **設定ファイル**: `.claude/settings.local.json` で hooks 設定管理
+
+#### 利用可能なhooksスクリプト
+```bash
+# 統合品質チェック（推奨）
+.claude/scripts/pre-commit-replacement.sh
+
+# 個別チェック
+.claude/scripts/code-quality.sh     # ruff + mypy
+.claude/scripts/run-tests.sh        # pytest実行  
+.claude/scripts/file-checks.sh      # ファイル品質
+```
+
+#### hooks自動実行タイミング
+- **PostToolUse**: Write/Edit/MultiEdit 後にファイルチェック提案
+- **UserPromptSubmit**: 「コミット」関連プロンプトで品質チェック実行
 
 ### Release Please（自動リリース管理）
 - **Conventional Commits**に基づく自動バージョニング

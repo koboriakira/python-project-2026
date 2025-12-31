@@ -1,11 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mkdir:*)",
-      "Bash(uv run pre-commit:*)",
-      "Bash(uv run:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(mv:*)",
+      "Bash(.claude/scripts/pre-commit-replacement.sh:*)"
     ],
     "deny": []
   }
