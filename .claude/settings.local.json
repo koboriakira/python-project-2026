@@ -9,7 +9,11 @@
       "Bash(gh run view:*)",
       "Bash(uv add:*)",
       "Bash(uv run:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(gh run list:*)",
+      "Bash(git commit:*)",
+      "Bash(uv sync:*)"
     ],
     "deny": []
   }
