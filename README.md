@@ -5,7 +5,7 @@
 ## 特徴
 
 - 🚀 **超高速**: uvによる爆速パッケージ管理
-- 🛠️ **最新ツール**: ruff、mypy、pytest、pre-commit
+- 🛠️ **最新ツール**: ruff、mypy、pytest、Claude Code hooks、pre-commit
 - 📦 **モダンな構成**: pyproject.tomlによる一元管理
 - 🧪 **完全なテスト**: カバレッジ測定とCI/CD
 - 🔧 **開発者体験**: リンター、フォーマッター、型チェック
@@ -27,8 +27,9 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # プロジェクトのセットアップ
 uv sync
 
-# pre-commitフックのインストール
-uv run pre-commit install
+# 品質管理ツールのセットアップ
+uv run pre-commit install              # Git hooks（手動開発時）
+# Claude Code hooks（AI統合）は .claude/settings.local.json で設定済み
 ```
 
 ### 従来の方法
@@ -58,8 +59,9 @@ uv run ruff check .
 # 型チェック
 uv run mypy
 
-# すべてのチェック実行
-uv run pre-commit run --all-files
+# 品質チェック実行
+.claude/scripts/pre-commit-replacement.sh   # Claude Code hooks（推奨）
+uv run pre-commit run --all-files           # 従来のpre-commit
 
 # アプリケーション実行
 uv run python-project-2026 hello --name "開発者"
