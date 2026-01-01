@@ -2,13 +2,29 @@
 
 2026年の最新Python開発テンプレート - uv、ruff、pytestを使った現代的な開発環境
 
-## 🚀 テンプレートとして使用
+## 🚀 クイックスタート
 
-このプロジェクトを新しいPythonプロジェクトのテンプレートとして使用できます：
+ワンコマンドで新しいPythonプロジェクトを作成：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/koboriakira/python-project-2026/main/install.sh | sh -s my-new-project
+```
+
+作成後：
+
+```bash
+cd my-new-project
+uv run pytest  # テスト実行
+uv run my-new-project --help  # アプリケーション確認
+```
+
+## 📋 テンプレートとして使用
+
+手動でテンプレートを使用する場合：
 
 ```bash
 # このリポジトリをクローン
-git clone https://github.com/username/python-project-2026.git
+git clone https://github.com/koboriakira/python-project-2026.git
 cd python-project-2026
 
 # 新しいプロジェクトを作成
@@ -24,6 +40,7 @@ uv run my-new-project --help  # アプリケーション確認
 
 ### install.shの機能
 
+- ✅ **自動ダウンロード**: GitHubから最新のテンプレートを取得
 - ✅ **完全なファイルコピー**: すべてのテンプレートファイルを新しいディレクトリにコピー
 - ✅ **名前の一括置換**: プロジェクト名・パッケージ名を適切に変換
 - ✅ **Git初期化**: 新しいGitリポジトリの初期化と初回コミット
