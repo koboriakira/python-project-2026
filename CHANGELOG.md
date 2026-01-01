@@ -5,6 +5,18 @@
 このプロジェクトは[セマンティックバージョニング](https://semver.org/spec/v2.0.0.html)に従い、
 [Conventional Commits](https://conventionalcommits.org/)を使用して自動的にリリースを生成します。
 
+## [0.2.0](https://github.com/koboriakira/python-project-2026/compare/v0.1.1...v0.2.0) (2026-01-01)
+
+
+### Features
+
+* プロジェクトテンプレート化機能の実装 ([#11](https://github.com/koboriakira/python-project-2026/issues/11)) ([50a3309](https://github.com/koboriakira/python-project-2026/commit/50a3309976a643a9bd0c921940f729c48186e1dd))
+
+
+### Bug Fixes
+
+* Update README and install script for improved project setup instructions ([#13](https://github.com/koboriakira/python-project-2026/issues/13)) ([7c5e88c](https://github.com/koboriakira/python-project-2026/commit/7c5e88cfb8e7414195b5e275693d250f6adb0a8d))
+
 ## [0.1.1](https://github.com/koboriakira/python-project-2026/compare/v0.1.0...v0.1.1) (2026-01-01)
 
 

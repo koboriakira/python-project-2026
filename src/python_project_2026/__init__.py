@@ -2,6 +2,6 @@
 2026年の最新Python開発テンプレート
 """
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 __author__ = "Developer"
 __email__ = "dev@example.com"
