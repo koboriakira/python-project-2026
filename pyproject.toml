@@ -1,6 +1,6 @@
 [project]
 name = "python-project-2026"
-version = "0.1.1"
+version = "0.2.0"
 description = "2026年の最新Python開発テンプレート"
 authors = [
     { name = "Developer", email = "dev@example.com" }
