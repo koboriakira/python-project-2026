@@ -68,6 +68,9 @@ jobs:
     needs: release-please
     runs-on: ubuntu-latest
     if: ${{ needs.release-please.outputs.release_created }}
+    environment:
+      name: test
+      url: https://test.pypi.org/p/python-project-2026
     permissions:
       id-token: write
     steps:
