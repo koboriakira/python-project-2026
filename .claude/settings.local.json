@@ -21,7 +21,8 @@
       "Bash(gh issue:*)",
       "Bash(git checkout:*)",
       "Bash(chmod:*)",
-      "Bash(./test_install.sh)"
+      "Bash(./test_install.sh)",
+      "Bash(gh pr create:*)"
     ],
     "deny": []
   }
