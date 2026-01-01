@@ -2,7 +2,7 @@
 set -e
 
 # プロジェクトテンプレート化スクリプト
-# Usage: ./install.sh {project-name}
+# Usage: curl -fsSL https://raw.githubusercontent.com/koboriakira/python-project-2026/main/install.sh | sh -s {project-name}
 
 PROJECT_NAME="$1"
 TEMPLATE_NAME="python-project-2026"
@@ -30,9 +30,10 @@ convert_to_package_name() {
     echo "$PROJECT_NAME" | tr '-' '_'
 }
 
-# ディレクトリ作成・コピー
-setup_project_directory() {
+# GitHubからテンプレートをダウンロード
+download_template() {
     local target_dir="$PROJECT_NAME"
+    local temp_dir="/tmp/python-project-2026-$$"
 
     echo "📁 プロジェクトディレクトリを設定中: $target_dir"
 
@@ -46,15 +47,25 @@ setup_project_directory() {
         mkdir -p "$target_dir"
     fi
 
-    # テンプレートファイルをコピー（.gitを除く）
-    echo "📋 テンプレートファイルをコピー中..."
-    rsync -av \
-        --exclude='.git' \
-        --exclude='install.sh' \
-        --exclude="$target_dir" \
-        ./ "$target_dir/"
+    # テンプレートをダウンロード
+    echo "📋 テンプレートをダウンロード中..."
+    if command -v git &> /dev/null; then
+        git clone --depth 1 https://github.com/koboriakira/python-project-2026.git "$temp_dir"
 
-    echo "✅ ファイルコピー完了"
+        # .gitディレクトリとinstall.shを除いてコピー
+        rsync -av \
+            --exclude='.git' \
+            --exclude='install.sh' \
+            "$temp_dir/" "$target_dir/"
+
+        # テンポラリディレクトリを削除
+        rm -rf "$temp_dir"
+    else
+        echo "❌ エラー: gitコマンドが見つかりません。gitをインストールしてください。"
+        exit 1
+    fi
+
+    echo "✅ ファイルダウンロード完了"
 }
 
 # プロジェクト名を一括置換
@@ -133,7 +144,7 @@ main() {
     echo "  パッケージ名: $package_name"
     echo ""
 
-    setup_project_directory
+    download_template
     replace_project_names
     initialize_project
 
