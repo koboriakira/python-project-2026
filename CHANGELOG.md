@@ -5,6 +5,13 @@
 このプロジェクトは[セマンティックバージョニング](https://semver.org/spec/v2.0.0.html)に従い、
 [Conventional Commits](https://conventionalcommits.org/)を使用して自動的にリリースを生成します。
 
+## [0.1.1](https://github.com/koboriakira/python-project-2026/compare/v0.1.0...v0.1.1) (2026-01-01)
+
+
+### Bug Fixes
+
+* TestPyPI Trusted Publisher用にenvironment設定を追加 ([#8](https://github.com/koboriakira/python-project-2026/issues/8)) ([51a7431](https://github.com/koboriakira/python-project-2026/commit/51a7431ff16fbdcc5e43c5faf825c76f1af02e83))
+
 ## 0.1.0 (2026-01-01)
 
 
