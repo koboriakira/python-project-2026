@@ -39,7 +39,21 @@ release-pleaseとGitHub Actionsが正常に動作するために、以下の設�
 - **Environment secrets**:
   - TestPyPI API tokenが必要な場合に設定
 
-### 4. Trusted Publishing（推奨）
+### 4. Codecov設定（カバレッジレポート用）
+
+**Repository Settings > Secrets and variables > Actions**で以下のシークレットを設定：
+
+#### `CODECOV_TOKEN`
+1. **Codecov.io**（https://codecov.io）でGitHubアカウントログイン
+2. リポジトリ追加：「Add new repository」→ `python-project-2026`選択
+3. **Repository Settings**→「General」タブ
+4. **Repository Upload Token**をコピー
+5. GitHub**Repository Settings**→「Secrets and variables」→「Actions」
+6. **New repository secret**クリック
+   - **Name**: `CODECOV_TOKEN`
+   - **Secret**: コピーしたトークンを貼り付け
+
+### 5. Trusted Publishing（推奨）
 
 PyPI/TestPyPIでTrusted Publishingを設定：
 
@@ -73,6 +87,14 @@ PyPI/TestPyPIでTrusted Publishingを設定：
 1. GITHUB_TOKENの権限不足
 2. Repository Settings > Actions > General
 3. **Workflow permissions**で**Read and write permissions**を選択
+
+### Codecovエラー: "Token required - not valid tokenless upload"
+
+**解決方法**:
+1. `CODECOV_TOKEN`が正しく設定されているか確認
+2. Codecov.ioでリポジトリが追加されているか確認
+3. トークンが有効期限切れでないか確認
+4. Codecovサービス障害の場合は復旧を待つ
 
 ### PyPI公開エラー
 
