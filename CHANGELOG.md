@@ -5,6 +5,27 @@
 このプロジェクトは[セマンティックバージョニング](https://semver.org/spec/v2.0.0.html)に従い、
 [Conventional Commits](https://conventionalcommits.org/)を使用して自動的にリリースを生成します。
 
+## 0.1.0 (2026-01-01)
+
+
+### Features
+
+* 2026年最新Python開発テンプレート初期作成 ([5981110](https://github.com/koboriakira/python-project-2026/commit/59811108ece62d1b869abc820c55ec1b77cf13b0))
+
+
+### Bug Fixes
+
+* CIのセキュリティ監査でpip-auditが見つからない問題を修正 ([d623a65](https://github.com/koboriakira/python-project-2026/commit/d623a6597347358220e3847a2048ef7d65477cdd))
+* GitHub Actions CI依存関係インストールエラーを修正 ([#4](https://github.com/koboriakira/python-project-2026/issues/4)) ([445af52](https://github.com/koboriakira/python-project-2026/commit/445af520cc2756d331eceb9b595d72083d275b37))
+* mypy設定のパッケージ名にスラッシュが含まれていた問題を修正 ([1324114](https://github.com/koboriakira/python-project-2026/commit/132411404699aeab60881b83e00deb2656077cac))
+* release-please GitHub Actions権限エラーを修正 ([#2](https://github.com/koboriakira/python-project-2026/issues/2)) ([42f7871](https://github.com/koboriakira/python-project-2026/commit/42f78712fb912d58245eb16769993decd0634de8))
+
+
+### Documentation
+
+* Claude Code機能統合とワークフロー最適化 ([#3](https://github.com/koboriakira/python-project-2026/issues/3)) ([09af203](https://github.com/koboriakira/python-project-2026/commit/09af2033e9cd0a3b79dda323e65b274e080158f7))
+* Update GITHUB_SETUP.md to include Codecov configuration and error resolution ([#5](https://github.com/koboriakira/python-project-2026/issues/5)) ([836c6e0](https://github.com/koboriakira/python-project-2026/commit/836c6e01b306d3e74ab1de8f641e4061963c2a66))
+
 ## [Unreleased]
 
 ### Features
