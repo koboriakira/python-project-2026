@@ -16,7 +16,9 @@
       "Bash(uv sync:*)",
       "Bash(find:*)",
       "WebFetch(domain:docs.codecov.com)",
-      "Bash(gh repo view:*)"
+      "Bash(gh repo view:*)",
+      "Bash(gh issue create:*)",
+      "Bash(gh issue:*)"
     ],
     "deny": []
   }
