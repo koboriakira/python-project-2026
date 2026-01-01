@@ -18,7 +18,10 @@
       "WebFetch(domain:docs.codecov.com)",
       "Bash(gh repo view:*)",
       "Bash(gh issue create:*)",
-      "Bash(gh issue:*)"
+      "Bash(gh issue:*)",
+      "Bash(git checkout:*)",
+      "Bash(chmod:*)",
+      "Bash(./test_install.sh)"
     ],
     "deny": []
   }
