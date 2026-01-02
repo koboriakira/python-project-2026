@@ -112,6 +112,22 @@ uv run pre-commit run --all-files           # 従来のpre-commit
 uv run python-project-2026 hello --name "開発者"
 ```
 
+## FastAPI Web API
+
+FastAPIによるモダンなWeb APIも実装されています：
+
+```bash
+# 開発サーバー起動
+uv run uvicorn python_project_2026.api:app --reload
+
+# APIドキュメントにアクセス
+# http://localhost:8000/docs (Swagger UI)
+# http://localhost:8000/redoc (ReDoc)
+
+# APIテスト実行
+uv run pytest tests/test_api.py
+```
+
 ## プロジェクト構造
 
 ```
@@ -119,10 +135,15 @@ python-project-2026/
 ├── src/
 │   └── python_project_2026/
 │       ├── __init__.py
-│       ├── main.py
-│       └── utils.py
+│       ├── main.py          # CLIエントリーポイント
+│       ├── api.py           # FastAPI アプリケーション
+│       ├── utils.py
+│       └── routers/         # FastAPI ルーター
+│           ├── __init__.py
+│           └── hello.py
 ├── tests/
 │   ├── test_main.py
+│   ├── test_api.py          # API テスト
 │   └── test_utils.py
 ├── pyproject.toml
 ├── README.md
@@ -137,6 +158,36 @@ python-project-2026/
 - **pytest**: テストの実行と設定
 - **mypy**: 型チェック
 - **coverage**: カバレッジ測定
+
+## デプロイ
+
+### Render（FastAPI Web Service）
+
+[Render](https://render.com)を使用したFastAPIアプリケーションのデプロイが可能です：
+
+#### デプロイ設定
+
+1. Render Dashboardで"New Web Service"を作成
+2. GitHubリポジトリを接続
+3. 以下の設定を使用：
+
+| 項目 | 設定値 |
+|------|--------|
+| **Root Directory** | （指定なし） |
+| **Build Command** | `uv sync --frozen && uv cache prune --ci` |
+| **Start Command** | `uvicorn src.python_project_2026.api:app --host 0.0.0.0 --port $PORT` |
+| **Language** | Python 3 |
+
+#### デプロイ後のアクセス
+
+- **API Root**: `https://your-app.onrender.com/`
+- **API ドキュメント**: `https://your-app.onrender.com/docs`
+- **ReDoc**: `https://your-app.onrender.com/redoc`
+
+#### 注意事項
+
+- 本番環境では[api.py](src/python_project_2026/api.py)のCORS設定を適切に制限してください
+- 環境変数はRender DashboardまたはBlueprint（render.yaml）で管理可能
 
 ## CI/CD
 
