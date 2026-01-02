@@ -5,6 +5,13 @@
 このプロジェクトは[セマンティックバージョニング](https://semver.org/spec/v2.0.0.html)に従い、
 [Conventional Commits](https://conventionalcommits.org/)を使用して自動的にリリースを生成します。
 
+## [0.3.0](https://github.com/koboriakira/python-project-2026/compare/v0.2.0...v0.3.0) (2026-01-02)
+
+
+### Features
+
+* add fastapi ([#16](https://github.com/koboriakira/python-project-2026/issues/16)) ([bfb1cf6](https://github.com/koboriakira/python-project-2026/commit/bfb1cf607fd7d176e3b21c4f2630802b7c2cd6c3))
+
 ## [0.2.0](https://github.com/koboriakira/python-project-2026/compare/v0.1.1...v0.2.0) (2026-01-01)
 
 
