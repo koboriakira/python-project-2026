@@ -5,6 +5,7 @@ from rich.console import Console
 from rich.panel import Panel
 
 from . import __version__
+from .presentation.cli.task_cli import task_app
 
 app = typer.Typer(
     name="python-project-2026",
@@ -12,6 +13,9 @@ app = typer.Typer(
     add_completion=False,
 )
 console = Console()
+
+# タスク管理サブコマンドを追加
+app.add_typer(task_app, name="task")
 
 
 @app.command()
