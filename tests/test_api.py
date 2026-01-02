@@ -1,5 +1,8 @@
 """FastAPI APIテスト"""
 
+import os
+from unittest.mock import patch
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -91,3 +94,108 @@ class TestAPI:
         data = response.json()
         assert data["info"]["title"] == "Python Project 2026 API"
         assert data["info"]["version"] == __version__
+
+
+class TestEnvironmentConfiguration:
+    """環境設定のテストクラス"""
+
+    def test_default_environment_is_production(self) -> None:
+        """デフォルト環境が本番環境であることを確認"""
+        # 環境変数をクリアして再インポート
+        with patch.dict(os.environ, {}, clear=True):
+            # モジュールを再読み込み
+            import importlib
+
+            from python_project_2026 import api
+
+            importlib.reload(api)
+
+            assert api.ENVIRONMENT == "production"
+            assert api.IS_DEVELOPMENT is False
+
+    def test_development_environment_detection(self) -> None:
+        """開発環境の検出テスト"""
+        test_cases = [
+            ("development", True),
+            ("dev", True),
+            ("local", True),
+            ("Development", True),  # 大文字小文字を区別しない
+            ("DEV", True),
+        ]
+
+        for env_value, expected_is_dev in test_cases:
+            with patch.dict(os.environ, {"ENVIRONMENT": env_value}, clear=True):
+                import importlib
+
+                from python_project_2026 import api
+
+                importlib.reload(api)
+
+                assert expected_is_dev == api.IS_DEVELOPMENT, f"Failed for ENVIRONMENT={env_value}"
+
+    def test_production_environment_detection(self) -> None:
+        """本番環境の検出テスト"""
+        with patch.dict(os.environ, {"ENVIRONMENT": "production"}, clear=True):
+            import importlib
+
+            from python_project_2026 import api
+
+            importlib.reload(api)
+
+            assert api.ENVIRONMENT == "production"
+            assert api.IS_DEVELOPMENT is False
+
+    def test_debug_flag_enables_development_mode(self) -> None:
+        """DEBUGフラグで開発モードが有効になることを確認"""
+        test_cases = [
+            ("true", True),
+            ("True", True),
+            ("1", True),
+            ("yes", True),
+            ("false", False),
+            ("0", False),
+            ("no", False),
+        ]
+
+        for debug_value, expected_is_dev in test_cases:
+            with patch.dict(os.environ, {"DEBUG": debug_value, "ENVIRONMENT": "production"}, clear=True):
+                import importlib
+
+                from python_project_2026 import api
+
+                importlib.reload(api)
+
+                assert expected_is_dev == api.IS_DEVELOPMENT, f"Failed for DEBUG={debug_value}"
+
+    def test_allowed_origins_parsing(self) -> None:
+        """許可するオリジンのパースのテスト"""
+        origins = "https://example.com,https://api.example.com,https://app.example.com"
+        with patch.dict(os.environ, {"ALLOWED_ORIGINS": origins}, clear=True):
+            import importlib
+
+            from python_project_2026 import api
+
+            importlib.reload(api)
+
+            expected = ["https://example.com", "https://api.example.com", "https://app.example.com"]
+            assert expected == api.ALLOWED_ORIGINS
+
+    def test_empty_allowed_origins(self) -> None:
+        """ALLOWED_ORIGINSが空の場合のテスト"""
+        with patch.dict(os.environ, {}, clear=True):
+            import importlib
+
+            from python_project_2026 import api
+
+            importlib.reload(api)
+
+            assert api.ALLOWED_ORIGINS == []
+
+    def test_root_endpoint_includes_environment(self) -> None:
+        """ルートエンドポイントに環境情報が含まれることを確認"""
+        client = TestClient(app)
+        response = client.get("/")
+        assert response.status_code == 200
+        data = response.json()
+        assert "environment" in data
+        assert data["environment"] in ["production", "development", "dev", "local"]

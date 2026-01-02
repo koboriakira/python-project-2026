@@ -35,9 +35,15 @@ uv run pytest -v                # 詳細モード
 uv run pytest tests/test_*.py   # 特定のテストファイル
 
 # FastAPI開発サーバー起動
-uv run uvicorn python_project_2026.api:app --reload              # 開発モード（ホットリロード）
-uv run uvicorn python_project_2026.api:app --reload --port 8000  # ポート指定
-uv run uvicorn python_project_2026.api:app --host 0.0.0.0        # 全インターフェースでリッスン
+# 開発モード（セキュリティ制限緩和、APIドキュメント有効）
+ENVIRONMENT=development uv run uvicorn python_project_2026.api:app --reload
+ENVIRONMENT=development uv run uvicorn python_project_2026.api:app --reload --port 8000
+
+# 本番モード（セキュアな設定、APIドキュメント無効）
+ENVIRONMENT=production ALLOWED_ORIGINS=https://yourdomain.com uv run uvicorn python_project_2026.api:app
+
+# 全インターフェースでリッスン
+uv run uvicorn python_project_2026.api:app --host 0.0.0.0
 
 # コード品質チェック
 uv run ruff check .              # リンティング
@@ -92,16 +98,55 @@ tests/                           # テストコード（pytest）
 ## 開発ワークフロー
 
 ### FastAPI開発
+
+#### 環境変数による設定切り替え
+FastAPIアプリケーションは環境変数で動作モードを切り替えられます：
+
+**開発モード（デフォルトで開発時に推奨）:**
+```bash
+# 開発モード設定
+export ENVIRONMENT=development
+# または
+ENVIRONMENT=development uv run uvicorn python_project_2026.api:app --reload
+
+# 特徴:
+# - すべてのオリジンからのCORS許可（allow_origins=["*"]）
+# - APIドキュメント有効（/docs, /redoc）
+# - 詳細なログ出力
+```
+
+**本番モード（デプロイ時）:**
+```bash
+# 本番モード設定
+export ENVIRONMENT=production
+export ALLOWED_ORIGINS=https://yourdomain.com,https://app.yourdomain.com
+# または
+ENVIRONMENT=production ALLOWED_ORIGINS=https://yourdomain.com uv run uvicorn python_project_2026.api:app
+
+# 特徴:
+# - 指定されたオリジンのみCORS許可
+# - APIドキュメント無効化（セキュリティ）
+# - セキュアな設定
+```
+
+**環境変数一覧:**
+| 変数名 | デフォルト | 説明 |
+|--------|-----------|------|
+| `ENVIRONMENT` | `production` | 環境設定（`development`, `dev`, `local`, `production`） |
+| `DEBUG` | `false` | デバッグモード（`true`, `1`, `yes`で有効） |
+| `ALLOWED_ORIGINS` | なし | 許可するオリジン（カンマ区切り） |
+
+#### 開発フロー
 ```bash
 # 1. APIサーバー起動（開発モード）
-uv run uvicorn python_project_2026.api:app --reload
+ENVIRONMENT=development uv run uvicorn python_project_2026.api:app --reload
 
 # 2. ブラウザでAPIドキュメントを確認
 # http://localhost:8000/docs (Swagger UI)
 # http://localhost:8000/redoc (ReDoc)
 
 # 3. APIテスト実行
-uv run pytest tests/test_api.py -v
+ENVIRONMENT=development uv run pytest tests/test_api.py -v
 
 # 4. エンドポイント追加
 # - routers/に新しいルーターファイル作成

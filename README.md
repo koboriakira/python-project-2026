@@ -117,16 +117,41 @@ uv run python-project-2026 hello --name "開発者"
 FastAPIによるモダンなWeb APIも実装されています：
 
 ```bash
-# 開発サーバー起動
+# 開発サーバー起動（開発モード）
+ENVIRONMENT=development uv run uvicorn python_project_2026.api:app --reload
+
+# または環境変数をエクスポート
+export ENVIRONMENT=development
 uv run uvicorn python_project_2026.api:app --reload
 
-# APIドキュメントにアクセス
+# 本番モード（セキュアな設定）
+ENVIRONMENT=production ALLOWED_ORIGINS=https://yourdomain.com uv run uvicorn python_project_2026.api:app
+
+# APIドキュメントにアクセス（開発モードのみ）
 # http://localhost:8000/docs (Swagger UI)
 # http://localhost:8000/redoc (ReDoc)
 
 # APIテスト実行
 uv run pytest tests/test_api.py
 ```
+
+### 環境変数
+
+| 変数名 | デフォルト | 説明 |
+|--------|-----------|------|
+| `ENVIRONMENT` | `production` | 環境設定（`development`, `dev`, `local`, `production`） |
+| `DEBUG` | `false` | デバッグモード（`true`, `1`, `yes`で有効） |
+| `ALLOWED_ORIGINS` | なし | 許可するオリジン（カンマ区切り、例：`https://example.com,https://app.example.com`） |
+
+**開発モードの動作:**
+- すべてのオリジンからのCORS許可
+- API ドキュメント（/docs, /redoc）有効
+- より詳細なログ出力
+
+**本番モードの動作:**
+- 指定されたオリジンのみCORS許可
+- API ドキュメント無効化
+- セキュアな設定
 
 ## プロジェクト構造
 
@@ -178,11 +203,16 @@ python-project-2026/
 | **Start Command** | `uvicorn src.python_project_2026.api:app --host 0.0.0.0 --port $PORT` |
 | **Language** | Python 3 |
 
-#### デプロイ後のアクセス
+4. 環境変数を設定（Render Dashboard）：
+   - `ENVIRONMENT`: `production`
+   - `ALLOWED_ORIGINS`: `https://yourdomain.com`（実際のドメインに置き換え）
+ヘルスチェック**: `https://your-app.onrender.com/health`
+- **API ドキュメント**: 本番環境では無効化（セキュリティのため）
 
-- **API Root**: `https://your-app.onrender.com/`
-- **API ドキュメント**: `https://your-app.onrender.com/docs`
-- **ReDoc**: `https://your-app.onrender.com/redoc`
+#### 注意事項
+
+- 本番環境では環境変数`ALLOWED_ORIGINS`を必ず設定してください
+- 開発環境では`ENVIRONMENT=development`を設定するとセキュリティ制限が緩和されます
 
 #### 注意事項
 
