@@ -6,6 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 2026年の最新Python開発テンプレートプロジェクト。uv、ruff、pytest、mypy、Claude Code hooks、pre-commitを使用したモダンなPython開発環境を提供。
 
+### 主な機能
+- **CLI**: typerによる使いやすいコマンドラインインターフェース
+- **Web API**: FastAPIによるモダンなREST API（自動ドキュメント生成、型安全、高速）
+- **両立**: CLIとWeb APIの両方の使い方をサポート
+
 ### Claude Code統合機能
 - **サブエージェント**: 専門領域別のAI支援（GitHub、コードレビュー、テスト、開発ワークフロー）
 - **スラッシュコマンド**: 開発タスクの自動化コマンド
@@ -28,6 +33,11 @@ uv run pytest                    # 基本テスト実行
 uv run pytest --cov             # カバレッジ付きテスト
 uv run pytest -v                # 詳細モード
 uv run pytest tests/test_*.py   # 特定のテストファイル
+
+# FastAPI開発サーバー起動
+uv run uvicorn python_project_2026.api:app --reload              # 開発モード（ホットリロード）
+uv run uvicorn python_project_2026.api:app --reload --port 8000  # ポート指定
+uv run uvicorn python_project_2026.api:app --host 0.0.0.0        # 全インターフェースでリッスン
 
 # コード品質チェック
 uv run ruff check .              # リンティング
@@ -59,10 +69,15 @@ uv remove package-name           # パッケージ削除
 src/python_project_2026/         # メインアプリケーションコード
 ├── __init__.py                  # パッケージ初期化・バージョン情報
 ├── main.py                      # CLIエントリーポイント（typer使用）
-└── utils.py                     # 共通ユーティリティ関数
+├── api.py                       # FastAPIアプリケーション
+├── utils.py                     # 共通ユーティリティ関数
+└── routers/                     # FastAPIルーター
+    ├── __init__.py
+    └── hello.py                 # 挨拶APIエンドポイント
 
 tests/                           # テストコード（pytest）
 ├── test_main.py                 # CLIアプリケーションテスト
+├── test_api.py                  # FastAPI APIテスト
 └── test_utils.py                # ユーティリティテスト
 ```
 
@@ -75,6 +90,27 @@ tests/                           # テストコード（pytest）
 - 依存関係グループ（dev、test、docs）
 
 ## 開発ワークフロー
+
+### FastAPI開発
+```bash
+# 1. APIサーバー起動（開発モード）
+uv run uvicorn python_project_2026.api:app --reload
+
+# 2. ブラウザでAPIドキュメントを確認
+# http://localhost:8000/docs (Swagger UI)
+# http://localhost:8000/redoc (ReDoc)
+
+# 3. APIテスト実行
+uv run pytest tests/test_api.py -v
+
+# 4. エンドポイント追加
+# - routers/に新しいルーターファイル作成
+# - api.pyでルーター登録
+# - テスト作成・実行
+
+# 5. コード品質チェック
+uv run ruff check . && uv run ruff format . && uv run mypy
+```
 
 ### 新機能開発
 1. テスト作成: `tests/test_*.py`
@@ -195,6 +231,8 @@ git commit -m "ci: CI設定改善"
 - `httpx`: 非同期HTTPクライアント
 - `rich`: 美しいターミナル出力
 - `typer`: CLIアプリケーション構築
+- `fastapi`: モダンなWeb APIフレームワーク
+- `uvicorn`: ASGI サーバー
 
 ### 開発依存関係
 - `pytest`: テストフレームワーク + プラグイン
