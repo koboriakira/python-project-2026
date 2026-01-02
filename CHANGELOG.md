@@ -5,6 +5,14 @@
 このプロジェクトは[セマンティックバージョニング](https://semver.org/spec/v2.0.0.html)に従い、
 [Conventional Commits](https://conventionalcommits.org/)を使用して自動的にリリースを生成します。
 
+## [0.4.0](https://github.com/koboriakira/python-project-2026/compare/v0.3.0...v0.4.0) (2026-01-02)
+
+
+### Features
+
+* add FastAPI Web API implementation and deployment instructions to README ([da1232d](https://github.com/koboriakira/python-project-2026/commit/da1232d3ce2faf02f621ea02d40f4d69941ccb95))
+* Renderに対応 ([a18d9e6](https://github.com/koboriakira/python-project-2026/commit/a18d9e62e20a6d8acb0f8c57fe88c647a046f458))
+
 ## [0.3.0](https://github.com/koboriakira/python-project-2026/compare/v0.2.0...v0.3.0) (2026-01-02)
 
 
