@@ -34,6 +34,8 @@ convert_to_package_name() {
 download_template() {
     local target_dir="$PROJECT_NAME"
     local temp_dir="/tmp/python-project-2026-$$"
+    local zip_file="$temp_dir/template.zip"
+    local repo_url="https://github.com/koboriakira/python-project-2026/archive/refs/heads/main.zip"
 
     echo "📁 プロジェクトディレクトリを設定中: $target_dir"
 
@@ -47,23 +49,44 @@ download_template() {
         mkdir -p "$target_dir"
     fi
 
+    # 一時ディレクトリ作成
+    mkdir -p "$temp_dir"
+
     # テンプレートをダウンロード
     echo "📋 テンプレートをダウンロード中..."
-    if command -v git &> /dev/null; then
-        git clone --depth 1 https://github.com/koboriakira/python-project-2026.git "$temp_dir"
 
-        # .gitディレクトリとinstall.shを除いてコピー
-        rsync -av \
-            --exclude='.git' \
-            --exclude='install.sh' \
-            "$temp_dir/" "$target_dir/"
-
-        # テンポラリディレクトリを削除
-        rm -rf "$temp_dir"
+    # curlまたはwgetでダウンロード
+    if command -v curl &> /dev/null; then
+        curl -fsSL "$repo_url" -o "$zip_file"
+    elif command -v wget &> /dev/null; then
+        wget -q "$repo_url" -O "$zip_file"
     else
-        echo "❌ エラー: gitコマンドが見つかりません。gitをインストールしてください。"
+        echo "❌ エラー: curlまたはwgetが必要です。いずれかをインストールしてください。"
+        rm -rf "$temp_dir"
         exit 1
     fi
+
+    # unzipで解凍
+    if ! command -v unzip &> /dev/null; then
+        echo "❌ エラー: unzipコマンドが見つかりません。unzipをインストールしてください。"
+        rm -rf "$temp_dir"
+        exit 1
+    fi
+
+    echo "📦 ファイルを展開中..."
+    unzip -q "$zip_file" -d "$temp_dir"
+
+    # 解凍されたディレクトリからファイルをコピー
+    # GitHubのzipは {repo}-{branch} という名前のディレクトリに解凍される
+    echo "📦 ファイルをコピー中..."
+    cp -r "$temp_dir/python-project-2026-main/." "$target_dir/"
+
+    # .gitディレクトリとinstall.shを削除（不要なファイル除外）
+    rm -rf "$target_dir/.git"
+    rm -f "$target_dir/install.sh"
+
+    # テンポラリディレクトリを削除
+    rm -rf "$temp_dir"
 
     echo "✅ ファイルダウンロード完了"
 }
@@ -104,16 +127,6 @@ initialize_project() {
 
     cd "$target_dir"
 
-    # Git初期化（既存の.gitディレクトリがない場合）
-    if [[ ! -d ".git" ]]; then
-        echo "🔧 Git リポジトリを初期化中..."
-        git init
-        git add .
-        git commit -m "feat: initialize project from python-project-2026 template
-
-🤖 Generated with Claude Code template installer"
-    fi
-
     # uv環境セットアップ
     echo "📦 Python環境をセットアップ中..."
     if command -v uv &> /dev/null; then
@@ -153,8 +166,9 @@ main() {
     echo ""
     echo "次のステップ:"
     echo "  1. cd $PROJECT_NAME"
-    echo "  2. uv run pytest  # テスト実行"
-    echo "  3. uv run $PROJECT_NAME --help  # アプリケーション確認"
+    echo "  2. git init  # Git管理を開始する場合（オプショナル）"
+    echo "  3. uv run pytest  # テスト実行"
+    echo "  4. uv run $PROJECT_NAME --help  # アプリケーション確認"
     echo ""
     echo "開発の開始:"
     echo "  - src/$package_name/ でコードを編集"

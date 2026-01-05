@@ -74,11 +74,13 @@ test_basic_installation() {
         exit 1
     fi
 
-    echo "✅ Git初期化チェック"
-    [[ -d ".git" ]] || { echo "❌ Git repository not initialized"; exit 1; }
-
-    # Git履歴確認
-    git log --oneline | head -1
+    echo "✅ .gitディレクトリ除外チェック"
+    # テンプレートの.gitディレクトリが存在しないことを確認
+    if [[ -d ".git" ]]; then
+        echo "❌ .gitディレクトリがコピーされています"
+        exit 1
+    fi
+    echo "✅ .gitディレクトリは正しく除外されました"
 
     cd ../..
     echo "🎉 基本インストールテスト完了"
