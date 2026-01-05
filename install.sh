@@ -127,21 +127,6 @@ initialize_project() {
 
     cd "$target_dir"
 
-    # Git初期化（既存の.gitディレクトリがない場合、gitが利用可能な場合のみ）
-    if [[ ! -d ".git" ]]; then
-        if command -v git &> /dev/null; then
-            echo "🔧 Git リポジトリを初期化中..."
-            git init
-            git add .
-            git commit -m "feat: initialize project from python-project-2026 template
-
-🤖 Generated with Claude Code template installer"
-        else
-            echo "⚠️  警告: gitが見つかりません。Git初期化をスキップします"
-            echo "   必要に応じて手動で 'git init' を実行してください"
-        fi
-    fi
-
     # uv環境セットアップ
     echo "📦 Python環境をセットアップ中..."
     if command -v uv &> /dev/null; then
@@ -181,8 +166,9 @@ main() {
     echo ""
     echo "次のステップ:"
     echo "  1. cd $PROJECT_NAME"
-    echo "  2. uv run pytest  # テスト実行"
-    echo "  3. uv run $PROJECT_NAME --help  # アプリケーション確認"
+    echo "  2. git init  # Git管理を開始する場合（オプショナル）"
+    echo "  3. uv run pytest  # テスト実行"
+    echo "  4. uv run $PROJECT_NAME --help  # アプリケーション確認"
     echo ""
     echo "開発の開始:"
     echo "  - src/$package_name/ でコードを編集"

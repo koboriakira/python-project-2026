@@ -74,29 +74,13 @@ test_basic_installation() {
         exit 1
     fi
 
-    echo "✅ .gitディレクトリ除外チェック（テンプレートから）"
+    echo "✅ .gitディレクトリ除外チェック"
     # テンプレートの.gitディレクトリが存在しないことを確認
-    # （存在する.gitは初期化で新規作成されたもののみ）
-    # コミット数が1つであることを確認（初期化コミットのみ）
-    commit_count=$(git rev-list --count HEAD 2>/dev/null || echo "0")
-    if [[ "$commit_count" -ne 1 ]]; then
-        echo "❌ テンプレートの.gitディレクトリがコピーされています（コミット数: $commit_count）"
+    if [[ -d ".git" ]]; then
+        echo "❌ .gitディレクトリがコピーされています"
         exit 1
     fi
-
-    # 初期化コミットメッセージを確認
-    if ! git log --oneline -1 | grep -q "initialize project from python-project-2026 template"; then
-        echo "❌ 初期化コミットが正しくありません"
-        exit 1
-    fi
-
-    echo "✅ テンプレートの.gitディレクトリは正しく除外されました"
-
-    echo "✅ Git初期化チェック"
-    [[ -d ".git" ]] || { echo "❌ Git repository not initialized"; exit 1; }
-
-    # Git履歴確認
-    git log --oneline | head -1
+    echo "✅ .gitディレクトリは正しく除外されました"
 
     cd ../..
     echo "🎉 基本インストールテスト完了"
