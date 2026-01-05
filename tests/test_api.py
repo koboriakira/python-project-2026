@@ -82,18 +82,15 @@ class TestAPI:
         assert len(parts) == 3
         assert all(part.isdigit() for part in parts)
 
-    def test_openapi_docs_accessible(self, client: TestClient) -> None:
-        """OpenAPIドキュメントにアクセス可能かテスト"""
+    def test_openapi_docs_not_accessible_in_production(self, client: TestClient) -> None:
+        """本番環境でOpenAPIドキュメントにアクセスできないことをテスト"""
         response = client.get("/docs")
-        assert response.status_code == 200
+        assert response.status_code == 404
 
-    def test_openapi_json_accessible(self, client: TestClient) -> None:
-        """OpenAPI JSONスキーマにアクセス可能かテスト"""
+    def test_openapi_json_not_accessible_in_production(self, client: TestClient) -> None:
+        """本番環境でOpenAPI JSONスキーマにアクセスできないことをテスト"""
         response = client.get("/openapi.json")
-        assert response.status_code == 200
-        data = response.json()
-        assert data["info"]["title"] == "Python Project 2026 API"
-        assert data["info"]["version"] == __version__
+        assert response.status_code == 404
 
 
 class TestEnvironmentConfiguration:
@@ -199,3 +196,34 @@ class TestEnvironmentConfiguration:
         data = response.json()
         assert "environment" in data
         assert data["environment"] in ["production", "development", "dev", "local"]
+
+    def test_openapi_docs_accessible_in_development(self) -> None:
+        """開発環境でOpenAPIドキュメントにアクセス可能であることをテスト"""
+        with patch.dict(os.environ, {"ENVIRONMENT": "development"}, clear=True):
+            import importlib
+
+            from python_project_2026 import api
+
+            importlib.reload(api)
+
+            # 開発環境でアプリを再作成
+            dev_client = TestClient(api.app)
+            response = dev_client.get("/docs")
+            assert response.status_code == 200
+
+    def test_openapi_json_accessible_in_development(self) -> None:
+        """開発環境でOpenAPI JSONスキーマにアクセス可能であることをテスト"""
+        with patch.dict(os.environ, {"ENVIRONMENT": "development"}, clear=True):
+            import importlib
+
+            from python_project_2026 import api
+
+            importlib.reload(api)
+
+            # 開発環境でアプリを再作成
+            dev_client = TestClient(api.app)
+            response = dev_client.get("/openapi.json")
+            assert response.status_code == 200
+            data = response.json()
+            assert data["info"]["title"] == "Python Project 2026 API"
+            assert "version" in data["info"]
