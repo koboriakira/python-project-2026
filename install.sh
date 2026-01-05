@@ -52,11 +52,13 @@ download_template() {
     if command -v git &> /dev/null; then
         git clone --depth 1 https://github.com/koboriakira/python-project-2026.git "$temp_dir"
 
-        # .gitディレクトリとinstall.shを除いてコピー
-        rsync -av \
-            --exclude='.git' \
-            --exclude='install.sh' \
-            "$temp_dir/" "$target_dir/"
+        # テンプレートファイルをコピー（cpコマンドで移植性確保）
+        echo "📦 ファイルをコピー中..."
+        cp -r "$temp_dir/." "$target_dir/"
+
+        # .gitディレクトリとinstall.shを削除（不要なファイル除外）
+        rm -rf "$target_dir/.git"
+        rm -f "$target_dir/install.sh"
 
         # テンポラリディレクトリを削除
         rm -rf "$temp_dir"
