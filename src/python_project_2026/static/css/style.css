@@ -1,0 +1,103 @@
+/* Custom styling for Python Project 2026 HTMX Demo */
+
+:root {
+    --primary-color: #007acc;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+}
+
+/* API info cards styling */
+.api-info-card {
+    background: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin: 1rem 0;
+    box-shadow: var(--card-box-shadow);
+}
+
+.api-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.api-info-header h3 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-healthy {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.status-production {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.status-development {
+    background-color: var(--warning-color);
+    color: black;
+}
+
+/* Environment specific styling */
+.env-development {
+    border-left: 4px solid var(--warning-color);
+}
+
+.env-production {
+    border-left: 4px solid var(--primary-color);
+}
+
+/* Loading indicators */
+.loading-spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .api-info-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+
+/* Utility classes */
+.text-small {
+    font-size: 0.875rem;
+}
+
+.text-muted {
+    color: var(--muted-color);
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+.mt-1 {
+    margin-top: 0.5rem;
+}

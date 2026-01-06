@@ -3,13 +3,15 @@
 import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from . import __version__
-from .routers import hello
+from .routers import hello, web
 
 # 環境設定
 ENVIRONMENT = os.getenv("ENVIRONMENT", "production")  # デフォルトは本番環境
@@ -70,9 +72,9 @@ else:
     )
 
 
-@app.get("/", tags=["Root"])
-async def root() -> JSONResponse:
-    """ルートエンドポイント"""
+@app.get("/api/", tags=["Root"])
+async def api_root() -> JSONResponse:
+    """APIルートエンドポイント"""
     return JSONResponse(
         content={
             "message": "Python Project 2026 API",
@@ -90,5 +92,14 @@ async def health() -> JSONResponse:
     return JSONResponse(content={"status": "healthy", "version": __version__})
 
 
+# スタティックファイルを提供
+static_path = Path(__file__).parent / "static"
+if static_path.exists():
+    app.mount("/static", StaticFiles(directory=str(static_path)), name="static")
+
 # ルーターを登録
+# Webページルーター(HTMX)
+app.include_router(web.router, tags=["Web"])
+
+# APIルーター(JSON)
 app.include_router(hello.router, prefix="/api", tags=["Hello"])

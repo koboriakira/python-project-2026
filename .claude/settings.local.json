@@ -22,7 +22,10 @@
       "Bash(git checkout:*)",
       "Bash(chmod:*)",
       "Bash(./test_install.sh)",
-      "Bash(gh pr create:*)"
+      "Bash(gh pr create:*)",
+      "Bash(mkdir:*)",
+      "Bash(curl:*)",
+      "Bash(pkill:*)"
     ],
     "deny": []
   }

@@ -121,7 +121,7 @@ uv run python-project-2026 hello --name "開発者"
 
 ## FastAPI Web API
 
-FastAPIによるモダンなWeb APIも実装されています：
+FastAPIによるモダンなWeb APIとHTMX対応のWebアプリケーションを実装しています：
 
 ```bash
 # 開発サーバー起動（開発モード）
@@ -134,13 +134,42 @@ uv run uvicorn python_project_2026.api:app --reload
 # 本番モード（セキュアな設定）
 ENVIRONMENT=production ALLOWED_ORIGINS=https://yourdomain.com uv run uvicorn python_project_2026.api:app
 
-# APIドキュメントにアクセス（開発モードのみ）
-# http://localhost:8000/docs (Swagger UI)
-# http://localhost:8000/redoc (ReDoc)
+# アクセス先
+# http://localhost:8000/                    # HTMX Webアプリケーション
+# http://localhost:8000/docs               # APIドキュメント（開発モードのみ）
+# http://localhost:8000/redoc              # ReDoc（開発モードのみ）
 
 # APIテスト実行
 uv run pytest tests/test_api.py
 ```
+
+### HTMX Webアプリケーション
+
+このテンプレートには、HTMLXを使用したモダンなWebアプリケーションの実装例が含まれています：
+
+- **ルートページ**: `http://localhost:8000/` - HTMX対応のWebページ
+- **動的コンテンツ**: API情報とヘルスチェックの動的表示
+- **自動更新**: ヘルスチェックの5秒間隔での自動更新
+- **プログレッシブエンハンスメント**: JavaScriptが無効でも基本機能が動作
+
+#### HTMX機能の特徴
+
+1. **API統合**: 既存のJSON APIエンドポイントを活用
+2. **部分更新**: ページ全体をリロードせずに部分的な更新
+3. **リアルタイム更新**: hx-triggerによる自動更新
+4. **エラーハンドリング**: サーバーエラー時のユーザーフレンドリーな表示
+
+#### HTMLを返すエンドポイント
+
+- `/`: メインページ（HTML）
+- `/api-info`: APIルートエンドポイント情報（HTMLフラグメント）
+- `/health-check`: ヘルスチェック結果（HTMLフラグメント）
+
+#### JSONを返すAPIエンドポイント
+
+- `/api/*`: 従来のJSON APIエンドポイント
+- `/health`: ヘルスチェック（JSON）
+- `/`: API情報（JSON）
 
 ### 環境変数
 
@@ -170,9 +199,16 @@ python-project-2026/
 │       ├── main.py          # CLIエントリーポイント
 │       ├── api.py           # FastAPI アプリケーション
 │       ├── utils.py
-│       └── routers/         # FastAPI ルーター
-│           ├── __init__.py
-│           └── hello.py
+│       ├── routers/         # FastAPI ルーター
+│       │   ├── __init__.py
+│       │   ├── hello.py     # JSON API
+│       │   └── web.py       # HTMX Web UI
+│       ├── templates/       # Jinja2 テンプレート
+│       │   ├── base.html
+│       │   └── index.html
+│       └── static/          # 静的ファイル
+│           └── css/
+│               └── style.css
 ├── tests/
 │   ├── test_main.py
 │   ├── test_api.py          # API テスト

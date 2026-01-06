@@ -19,8 +19,16 @@ class TestAPI:
         return TestClient(app)
 
     def test_root_endpoint(self, client: TestClient) -> None:
-        """ルートエンドポイントのテスト"""
+        """ルートエンドポイントのテスト (HTMLページ)"""
         response = client.get("/")
+        assert response.status_code == 200
+        assert "text/html" in response.headers.get("content-type", "")
+        assert "HTMX Demo" in response.text
+        assert "Python Project 2026" in response.text
+
+    def test_api_root_endpoint(self, client: TestClient) -> None:
+        """APIルートエンドポイントのテスト"""
+        response = client.get("/api/")
         assert response.status_code == 200
         data = response.json()
         assert data["message"] == "Python Project 2026 API"
@@ -188,10 +196,10 @@ class TestEnvironmentConfiguration:
 
             assert api.ALLOWED_ORIGINS == []
 
-    def test_root_endpoint_includes_environment(self) -> None:
-        """ルートエンドポイントに環境情報が含まれることを確認"""
+    def test_api_root_endpoint_includes_environment(self) -> None:
+        """APIルートエンドポイントに環境情報が含まれることを確認"""
         client = TestClient(app)
-        response = client.get("/")
+        response = client.get("/api/")
         assert response.status_code == 200
         data = response.json()
         assert "environment" in data
