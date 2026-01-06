@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}ホーム - Python Project 2026{% endblock %}
+
+{% block content %}
+<article>
+    <header>
+        <h1>Python Project 2026 - HTMX Demo</h1>
+        <p>このページは、FastAPI + HTMXを使った動的なWebアプリケーションのデモです。</p>
+    </header>
+
+    <section>
+        <h2>API情報</h2>
+        <p>以下のボタンをクリックすると、APIのルートエンドポイントから情報を取得して表示します。</p>
+
+        <div id="api-info-container">
+            <button
+                hx-get="/api-info"
+                hx-target="#api-info-container"
+                hx-swap="innerHTML"
+                hx-indicator="#loading-indicator"
+            >
+                API情報を取得
+            </button>
+            <div id="loading-indicator" class="htmx-indicator" aria-busy="true">読み込み中...</div>
+        </div>
+    </section>
+
+    <section>
+        <h2>ヘルスチェック</h2>
+        <p>APIのヘルスステータスをリアルタイムで確認できます。</p>
+
+        <div id="health-check-container">
+            <button
+                hx-get="/health-check"
+                hx-target="#health-check-container"
+                hx-swap="innerHTML"
+                hx-trigger="click, every 5s"
+                hx-indicator="#health-loading"
+            >
+                ヘルスチェック実行
+            </button>
+            <div id="health-loading" class="htmx-indicator" aria-busy="true">チェック中...</div>
+        </div>
+    </section>
+
+    <section>
+        <h2>HTMX機能のデモ</h2>
+        <details>
+            <summary>詳細を見る</summary>
+            <ul>
+                <li><strong>動的コンテンツ読み込み</strong>: ページ全体をリロードすることなく、サーバーから部分的なHTMLを取得</li>
+                <li><strong>自動更新</strong>: ヘルスチェックは5秒ごとに自動的に更新</li>
+                <li><strong>プログレッシブエンハンスメント</strong>: JavaScriptが無効でも基本機能は動作</li>
+            </ul>
+        </details>
+    </section>
+</article>
+
+<style>
+    .htmx-indicator {
+        opacity: 0;
+        transition: opacity 200ms ease-in;
+    }
+    .htmx-request .htmx-indicator {
+        opacity: 1;
+    }
+    .htmx-request.htmx-indicator {
+        opacity: 1;
+    }
+</style>
+{% endblock %}
